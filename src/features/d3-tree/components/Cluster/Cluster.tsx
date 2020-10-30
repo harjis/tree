@@ -5,7 +5,6 @@ import { render } from "./Cluster-d3";
 
 export type Props<T> = {
   height: number;
-  idKey: keyof T;
   labelKey: keyof T;
   root: HierarchyNode<T>;
   selectedItemIds: Set<unknown>; //TODO could this be generalized

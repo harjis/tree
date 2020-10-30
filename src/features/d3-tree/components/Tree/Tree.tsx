@@ -15,12 +15,13 @@ export type Props<T> = {
 };
 export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
   const tree = stratify(props.items, props.idKey, props.parentKey);
-  const { search, onSearch, selectedTree } = useSelectedTree({
+  const { search, onSearch, selectedItemIds } = useSelectedTree({
     idKey: props.idKey,
     items: props.items,
     itemKey: props.labelKey,
     tree,
   });
+
   return (
     <div>
       <input
@@ -34,10 +35,9 @@ export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
       <Canvas height={props.height} width={props.width}>
         <Cluster
           height={props.height}
-          idKey={props.idKey}
           labelKey={props.labelKey}
           root={tree}
-          selectedItemIds={new Set()}
+          selectedItemIds={selectedItemIds}
           width={props.width}
         />
       </Canvas>
