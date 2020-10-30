@@ -1,7 +1,7 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 
-import { Canvas, CanvasProps, Cluster, stratify } from "../index";
+import { Tree, TreeProps } from "../index";
 
 type Name = {
   id: number;
@@ -26,18 +26,17 @@ export default {
   argTypes: {},
 } as Meta;
 
-const Template: Story<CanvasProps> = (args) => {
-  const hierarchicalNames = stratify(names, "id", "parentId");
+const Template: Story<TreeProps<Name>> = (args) => {
   return (
     <div>
-      <Canvas height={args.height} width={args.width}>
-        <Cluster
-          height={args.height}
-          root={hierarchicalNames}
-          labelKey="name"
-          width={args.width}
-        />
-      </Canvas>
+      <Tree
+        height={args.height}
+        idKey="id"
+        items={names}
+        labelKey="name"
+        parentKey="parentId"
+        width={args.width}
+      />
     </div>
   );
 };
