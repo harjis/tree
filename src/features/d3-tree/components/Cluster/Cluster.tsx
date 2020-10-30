@@ -4,9 +4,11 @@ import { HierarchyNode } from "d3";
 import { render } from "./Cluster-d3";
 
 export type Props<T> = {
-  root: HierarchyNode<T>;
-  labelKey: keyof T;
   height: number;
+  idKey: keyof T;
+  labelKey: keyof T;
+  root: HierarchyNode<T>;
+  selectedItemIds: Set<unknown>; //TODO could this be generalized
   width: number;
 };
 export const Cluster = <T,>(props: PropsWithChildren<Props<T>>) => {

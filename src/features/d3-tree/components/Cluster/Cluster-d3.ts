@@ -53,6 +53,13 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
     .attr("y", (d) => d.x)
     .attr("dy", "0.31em")
     .attr("dx", (d) => (d.children ? -6 : 6))
+    .attr("fill", (d) => {
+      if (props.selectedItemIds.has(d.data[props.idKey])) {
+        return "red";
+      } else {
+        return "black";
+      }
+    })
     .text((d) => String(d.data[props.labelKey]))
     .filter((d) => !!d.children)
     .attr("text-anchor", "end")
