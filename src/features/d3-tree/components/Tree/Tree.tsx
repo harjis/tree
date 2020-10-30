@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 import { Canvas } from "../Canvas";
 import { Cluster } from "../Cluster";
 import { stratify } from "../../utils/stratify";
-import { useSelectedItems } from "../../../../hooks/useSelectedItems";
+import { useSelectedTree } from "../../../../hooks/useSelectedTree";
 
 export type Props<T> = {
   height: number;
@@ -14,15 +14,13 @@ export type Props<T> = {
   width: number;
 };
 export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
-  const hierarchicalNames = stratify(props.items, props.idKey, props.parentKey);
-  const { selectedItems, search, onSearch } = useSelectedItems({
+  const tree = stratify(props.items, props.idKey, props.parentKey);
+  const { search, onSearch, selectedTree } = useSelectedTree({
+    idKey: props.idKey,
     items: props.items,
     itemKey: props.labelKey,
+    tree,
   });
-  const selectedItemIds = React.useMemo(
-    () => new Set([...selectedItems.map((item) => item[props.idKey])]),
-    [selectedItems]
-  );
   return (
     <div>
       <input
@@ -38,8 +36,8 @@ export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
           height={props.height}
           idKey={props.idKey}
           labelKey={props.labelKey}
-          root={hierarchicalNames}
-          selectedItemIds={selectedItemIds}
+          root={tree}
+          selectedItemIds={new Set()}
           width={props.width}
         />
       </Canvas>

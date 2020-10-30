@@ -1,6 +1,7 @@
 import useSearch, { Props, ReturnType as SearchReturnType } from "./useSearch";
 
-type ReturnType<T> = {
+export type { Props };
+export type ReturnType<T> = {
   search: SearchReturnType<T>["search"];
   onSearch: SearchReturnType<T>["onSearch"];
   selectedItems: T[];
