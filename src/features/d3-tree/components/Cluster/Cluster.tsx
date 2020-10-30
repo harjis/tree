@@ -5,6 +5,7 @@ import { render } from "./Cluster-d3";
 
 export type Props<T> = {
   root: HierarchyNode<T>;
+  labelKey: keyof T;
   height: number;
   width: number;
 };

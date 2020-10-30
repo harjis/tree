@@ -34,6 +34,7 @@ const Template: Story<CanvasProps> = (args) => {
         <Cluster
           height={args.height}
           root={hierarchicalNames}
+          labelKey="name"
           width={args.width}
         />
       </Canvas>

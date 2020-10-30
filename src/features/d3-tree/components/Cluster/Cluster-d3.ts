@@ -1,13 +1,7 @@
 import { select, cluster } from "d3";
 import { Props } from "./Cluster";
 
-type BaseNode = {
-  name: string;
-};
-export const render = <T extends BaseNode>(
-  wrapper: SVGGElement,
-  props: Props<T>
-) => {
+export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
   const selection = select(wrapper);
   selection.selectAll("g").remove();
 
@@ -59,7 +53,7 @@ export const render = <T extends BaseNode>(
     .attr("y", (d) => d.x)
     .attr("dy", "0.31em")
     .attr("dx", (d) => (d.children ? -6 : 6))
-    .text((d) => d.data.name)
+    .text((d) => String(d.data[props.labelKey]))
     .filter((d) => !!d.children)
     .attr("text-anchor", "end")
     .clone(true)
