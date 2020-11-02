@@ -15,8 +15,8 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
   const textWrapper = selection.append("g");
 
   const dx = 50;
-  const dy = props.width / (props.root.height + 1);
-  const root = cluster<T>().nodeSize([dx, dy])(props.root);
+  const dy = props.width / (props.tree.height + 1);
+  const root = cluster<T>().nodeSize([dx, dy])(props.tree);
 
   pathWrapper
     .selectAll("path")
@@ -60,7 +60,10 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
     .attr("y", (d) => d.x)
     .attr("dy", "0.31em")
     .attr("dx", (d) => (d.children ? -6 : 6))
-    .attr("fill", (d) => (props.selectedItemIds.has(d.id) ? "red" : "black"))
+    .attr("fill", (d) =>
+      // d.id && -> because d3 type is id?: string;
+      d.id && props.selectedItemIds.has(d.id) ? "red" : "black"
+    )
     .text((d) => String(d.data[props.labelKey]))
     .filter((d) => !!d.children)
     .attr("text-anchor", "end")

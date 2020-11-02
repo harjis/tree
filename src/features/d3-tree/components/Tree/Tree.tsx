@@ -1,5 +1,6 @@
 import React, { PropsWithChildren } from "react";
 
+import { BaseItem } from "../../types";
 import { Canvas } from "../Canvas";
 import { Cluster } from "../Cluster";
 import { stratify } from "../../utils/stratify";
@@ -13,10 +14,16 @@ export type Props<T> = {
   parentKey: keyof T;
   width: number;
 };
-export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
-  const tree = stratify(props.items, props.idKey, props.parentKey);
+export const Tree = <T extends BaseItem>(
+  props: PropsWithChildren<Props<T>>
+) => {
+  // In our app all d3 related stuff could be completely inside the useSelectedTree hook
+  // I have them here because Cluster takes tree as props
+  const tree = React.useMemo(
+    () => stratify(props.items, props.idKey, props.parentKey),
+    [props.items, props.idKey, props.parentKey]
+  );
   const { search, onSearch, selectedItemIds } = useSelectedTree({
-    idKey: props.idKey,
     items: props.items,
     itemKey: props.labelKey,
     tree,
@@ -36,7 +43,7 @@ export const Tree = <T,>(props: PropsWithChildren<Props<T>>) => {
         <Cluster
           height={props.height}
           labelKey={props.labelKey}
-          root={tree}
+          tree={tree}
           selectedItemIds={selectedItemIds}
           width={props.width}
         />

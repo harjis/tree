@@ -3,22 +3,36 @@ import { Story, Meta } from "@storybook/react";
 
 import { Tree, TreeProps } from "../index";
 
-type Name = {
+interface BaseType {
+  type: string;
+}
+interface Folder extends BaseType {
   id: number;
   name: string;
   parentId: number | null;
-};
+  type: "folder";
+}
+interface Report extends BaseType {
+  id: number;
+  name: string;
+  parentId: number | null;
+  type: "report";
+}
 
-const names: Name[] = [
-  { id: 1, name: "Eve", parentId: null },
-  { id: 2, name: "Cain", parentId: 1 },
-  { id: 3, name: "Seth", parentId: 1 },
-  { id: 4, name: "Enos", parentId: 3 },
-  { id: 5, name: "Noam", parentId: 3 },
-  { id: 6, name: "Abel", parentId: 1 },
-  { id: 7, name: "Awan", parentId: 1 },
-  { id: 8, name: "Enoch", parentId: 7 },
-  { id: 9, name: "Azura", parentId: 1 },
+const folders: Folder[] = [
+  { id: 1, name: "Root", parentId: null, type: "folder" },
+  { id: 2, name: "Cats", parentId: 1, type: "folder" },
+  { id: 3, name: "Dogs", parentId: 1, type: "folder" },
+  { id: 4, name: "Small", parentId: 2, type: "folder" },
+  { id: 5, name: "Big", parentId: 2, type: "folder" },
+];
+
+const reports: Report[] = [
+  { id: 10, name: "Kitten", parentId: 4, type: "report" },
+  { id: 20, name: "Kitten2", parentId: 4, type: "report" },
+  { id: 30, name: "Buldog", parentId: 3, type: "report" },
+  { id: 40, name: "Under root", parentId: 1, type: "report" },
+  { id: 50, name: "Fatcat", parentId: 5, type: "report" },
 ];
 
 export default {
@@ -26,13 +40,14 @@ export default {
   argTypes: {},
 } as Meta;
 
-const Template: Story<TreeProps<Name>> = (args) => {
+const Template: Story<TreeProps<Folder | Report>> = (args) => {
+  const combined: Array<Report | Folder> = [...folders, ...reports];
   return (
     <div>
       <Tree
         height={args.height}
         idKey="id"
-        items={names}
+        items={combined}
         labelKey="name"
         parentKey="parentId"
         width={args.width}
