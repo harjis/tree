@@ -41,15 +41,7 @@ export const useSelectedTree = <T extends BaseItem>(
       itemsMap,
       props.tree
     );
-    const selectedNodesAndTheirAllParents = getSelectedNodesAllParents(
-      props.tree,
-      selectedNodes
-    );
-
-    // String(node.id) because of d3 type is id?: string; but we always have id
-    return new Set([
-      ...selectedNodesAndTheirAllParents.map((node) => String(node.id)),
-    ]);
+    return getSelectedNodesAndAllTheirParents(props.tree, selectedNodes);
   }, [itemsMap, props.tree, selectedItems]);
 
   return {
@@ -93,11 +85,16 @@ function getSelectedNodes<T extends BaseItem>(
   });
 }
 
-function getSelectedNodesAllParents<T extends BaseItem>(
+function getSelectedNodesAndAllTheirParents<T extends BaseItem>(
   tree: HierarchyNode<T>,
   selectedNodes: HierarchyNode<T>[]
 ) {
-  return selectedNodes.flatMap((node) => {
-    return tree.path(node);
-  });
+  // String(node.id) because of d3 type is id?: string; but we always have id
+  return new Set(
+    selectedNodes
+      .flatMap((node) => {
+        return tree.path(node);
+      })
+      .map((node) => String(node.id))
+  );
 }
