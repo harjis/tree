@@ -5,6 +5,7 @@ import { Canvas } from "../Canvas";
 import { Cluster } from "../Cluster";
 import { stratify } from "../../utils/stratify";
 import { useSelectedTree } from "../../../../hooks/useSelectedTree";
+import { useHighlightedTreeItem } from "../../../../hooks/useHighlightedTreeItem";
 
 export type Props<T> = {
   height: number;
@@ -29,8 +30,12 @@ export const Tree = <T extends BaseItem>(
     tree,
   });
 
+  const highlightedTreeItem = useHighlightedTreeItem({ tree });
+
   return (
-    <div>
+    <div tabIndex={0} ref={highlightedTreeItem.hotkeyRef}>
+      Press arrow keys to navigate! <br />
+      Search:{" "}
       <input
         type="text"
         value={search}
@@ -42,6 +47,7 @@ export const Tree = <T extends BaseItem>(
       <Canvas height={props.height} width={props.width}>
         <Cluster
           height={props.height}
+          highlightedItemId={highlightedTreeItem.highlightedItemId}
           labelKey={props.labelKey}
           tree={tree}
           selectedItemIds={selectedItemIds}

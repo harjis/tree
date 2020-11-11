@@ -3,6 +3,8 @@ import { Story, Meta } from "@storybook/react";
 
 import { Tree, TreeProps } from "../index";
 
+import "./tree.css";
+
 interface BaseType {
   type: string;
 }

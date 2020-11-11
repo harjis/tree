@@ -60,10 +60,11 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
     .attr("y", (d) => d.x)
     .attr("dy", "0.31em")
     .attr("dx", (d) => (d.children ? -6 : 6))
-    .attr("fill", (d) =>
+    .attr("fill", (d) => {
+      if (d.id === props.highlightedItemId) return "blue";
       // d.id && -> because d3 type is id?: string;
-      d.id && props.selectedItemIds.has(d.id) ? "red" : "black"
-    )
+      return d.id && props.selectedItemIds.has(d.id) ? "red" : "black";
+    })
     .text((d) => String(d.data[props.labelKey]))
     .filter((d) => !!d.children)
     .attr("text-anchor", "end")

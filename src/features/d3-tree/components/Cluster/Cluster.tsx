@@ -5,6 +5,7 @@ import { render } from "./Cluster-d3";
 
 export type Props<T> = {
   height: number;
+  highlightedItemId: string | undefined;
   labelKey: keyof T;
   tree: HierarchyNode<T>;
   selectedItemIds: Set<string>;
