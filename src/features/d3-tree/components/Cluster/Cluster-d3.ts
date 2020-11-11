@@ -1,4 +1,4 @@
-import { select, cluster } from "d3";
+import { select, tree } from "d3";
 import { Props } from "./Cluster";
 
 export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
@@ -16,7 +16,7 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
 
   const dx = 50;
   const dy = props.width / (props.tree.height + 1);
-  const root = cluster<T>().nodeSize([dx, dy])(props.tree);
+  const root = tree<T>().nodeSize([dx, dy])(props.tree);
 
   pathWrapper
     .selectAll("path")
@@ -24,7 +24,7 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
     .join("path")
     .attr("stroke", (d) => {
       if (props.selectedItemIds.has(String(d.target.id))) {
-        return "red";
+        return "blue";
       } else {
         return "#555";
       }
@@ -61,9 +61,9 @@ export const render = <T>(wrapper: SVGGElement, props: Props<T>) => {
     .attr("dy", "0.31em")
     .attr("dx", (d) => (d.children ? -6 : 6))
     .attr("fill", (d) => {
-      if (d.id === props.highlightedItemId) return "blue";
+      if (d.id === props.highlightedItemId) return "red";
       // d.id && -> because d3 type is id?: string;
-      return d.id && props.selectedItemIds.has(d.id) ? "red" : "black";
+      return d.id && props.selectedItemIds.has(d.id) ? "blue" : "black";
     })
     .text((d) => String(d.data[props.labelKey]))
     .filter((d) => !!d.children)
