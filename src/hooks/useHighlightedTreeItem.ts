@@ -109,6 +109,7 @@ function selectTopSideSibling<Item>(
   }
 }
 
+// Copy-pasta for now!
 function selectBottomSideSibling<Item>(
   tree: HierarchyNode<Item>,
   currentlyHighlightedItemId: string | undefined
