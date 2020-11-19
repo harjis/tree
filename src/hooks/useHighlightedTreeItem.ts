@@ -16,8 +16,9 @@ export const useHighlightedTreeItem = <Item, Element extends HTMLElement>(
   const [highlightedItemId, setHighlightedItemId] = React.useState<
     string | undefined
   >(props.tree.id);
-  // useMemo so that useHotkeys refCallback doesn't cleanup on
-  // every render
+
+  // When highlightedItemId or props.tree change the previous eventlisteners get cleaned up and new ones
+  // get attached. Probably can't do anything about it
   const eventListeners = React.useMemo(
     () => [
       {
