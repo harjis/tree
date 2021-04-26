@@ -53,11 +53,11 @@ export const useSelectedTree = <T extends BaseItem>(
               : []
             : //@ts-ignore missing from types
               [props.tree.find((d) => String(d.id) === String(treeItem.data.id))];
-        selectedNodes
-          .flatMap((node) => {
-            return props.tree.path(node);
-          })
-          .map((node) => itemsTemp.add(String(node.id)));
+        selectedNodes.forEach((node) => {
+          props.tree.path(node).forEach((a) => {
+            itemsTemp.add(String(a.data.id));
+          });
+        });
       }
     });
     return itemsTemp;

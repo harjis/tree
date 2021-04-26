@@ -63,7 +63,7 @@ const reports: Report[] = [
 
 function App() {
   // const combined: Array<Report | Folder> = [...folders, ...reports];
-  const combined = React.useMemo(() => generate(3, 10), []);
+  const combined = React.useMemo(() => generate(3, 20), []);
   console.log(combined.length);
   return (
     <Tree
