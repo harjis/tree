@@ -11,9 +11,13 @@ import { generate } from "./dataGenerator";
 * 1k nodes prod: useSelectedTree: 80ms which is ran 2 times. Whole thing with rendering ~230ms
 *
 * optimized 1k nodes prod: useSelectedTree: ~100ms which is ran 1 times. Whole thing with rendering ~170ms
+* more optimized 1k nodes prod: useSelectedTree: ~100ms which is ran 1 times. Whole thing with rendering ~113ms
+*
 *
 * generate(3, 15)
 * optimized 3k nodes prod: useSelectedTree: ~800ms which is ran 1 times. Whole thing with rendering ~1s
+* more-optimized 3k nodes prod: useSelectedTree: ~800ms which is ran 1 times. Whole thing with rendering ~430ms
+*
 *
 * generate(3, 20)
 * 8k nodes dev: useSelectedTree: 2,5s which is ran 4 times. Whole thing with rendering ~10s
@@ -22,7 +26,7 @@ import { generate } from "./dataGenerator";
 * optimized 8k nodes dev: useSelectedTree: 2.5s which is ran 2 times. Whole thing with rendering ~5.6s
 * optimized 8k nodes prod: useSelectedTree: 3,7s which is ran 1 times. Whole thing with rendering ~4,5s
 *
-* further optimized 8k nodes prod: useSelectedTree: 20ms which is ran 1 times. Whole thing with rendering ~500ms
+* more-optimized 8k nodes prod: useSelectedTree: 20ms which is ran 1 times. Whole thing with rendering ~757ms
 * */
 interface BaseType {
   type: string;
@@ -59,7 +63,7 @@ const reports: Report[] = [
 
 function App() {
   // const combined: Array<Report | Folder> = [...folders, ...reports];
-  const combined = React.useMemo(() => generate(3, 20), []);
+  const combined = React.useMemo(() => generate(3, 10), []);
   console.log(combined.length);
   return (
     <Tree
