@@ -40,24 +40,19 @@ export const useSelectedTree = <T extends BaseItem>(
     if (search.length === 0) {
       return itemsTemp;
     }
-    props.items.forEach((item) => {
-      const filteredItemValue = item[props.itemKey];
+    props.tree.each((treeItem) => {
+      const filteredItemValue = treeItem.data[props.itemKey];
       if (
         typeof filteredItemValue === "string" &&
         filteredItemValue.toLocaleLowerCase().includes(search.toLowerCase())
       ) {
-        // @ts-ignore
-        const treeItem: HierarchyNode<T> = props.tree.find(
-          //@ts-ignore missing from types
-          (d) => String(d.id) === String(item.id)
-        );
         const selectedNodes =
-          item.type === "folder"
+          treeItem.data.type === "folder"
             ? treeItem && treeItem.children
               ? treeItem.children
               : []
             : //@ts-ignore missing from types
-              [props.tree.find((d) => String(d.id) === String(item.id))];
+              [props.tree.find((d) => String(d.id) === String(treeItem.data.id))];
         selectedNodes
           .flatMap((node) => {
             return props.tree.path(node);
@@ -66,7 +61,7 @@ export const useSelectedTree = <T extends BaseItem>(
       }
     });
     return itemsTemp;
-  }, [props.itemKey, props.items, props.tree, search]);
+  }, [props.itemKey, props.tree, search]);
 
   return {
     search,

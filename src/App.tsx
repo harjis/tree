@@ -21,6 +21,8 @@ import { generate } from "./dataGenerator";
 *
 * optimized 8k nodes dev: useSelectedTree: 2.5s which is ran 2 times. Whole thing with rendering ~5.6s
 * optimized 8k nodes prod: useSelectedTree: 3,7s which is ran 1 times. Whole thing with rendering ~4,5s
+*
+* further optimized 8k nodes prod: useSelectedTree: 20ms which is ran 1 times. Whole thing with rendering ~500ms
 * */
 interface BaseType {
   type: string;
@@ -57,7 +59,7 @@ const reports: Report[] = [
 
 function App() {
   // const combined: Array<Report | Folder> = [...folders, ...reports];
-  const combined = React.useMemo(() => generate(3, 15), []);
+  const combined = React.useMemo(() => generate(3, 20), []);
   console.log(combined.length);
   return (
     <Tree
