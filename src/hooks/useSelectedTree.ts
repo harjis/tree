@@ -49,11 +49,15 @@ function getSelectedNodes<T extends BaseItem>(
     // I think d3 uses "leaf node" and "node" respectively
     if (selectedItem.type === "folder") {
       //@ts-ignore missing from types
-      const treeItem = tree.find((d) => d.id === String(selectedItem.id));
-      return treeItem ? treeItem.children : [];
+      const treeItem = tree.find(
+        //@ts-ignore missing from types
+        (d) => String(d.id) === String(selectedItem.id)
+      );
+
+      return treeItem && treeItem.children ? treeItem.children : [];
     } else {
       //@ts-ignore missing from types
-      return [tree.find((d) => d.id === String(selectedItem.id))];
+      return [tree.find((d) => String(d.id) === String(selectedItem.id))];
     }
   });
 }

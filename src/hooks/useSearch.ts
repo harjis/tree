@@ -27,7 +27,7 @@ export default function useSearch<T>({
 
   const doSearch = React.useCallback(
     (value: string): T[] =>
-      options && options.caseSensitive === true
+      options && options.caseSensitive
         ? caseSensitiveFilteringService(items, itemKey, value)
         : filteringService(items, itemKey, value),
     [items, itemKey, options]
