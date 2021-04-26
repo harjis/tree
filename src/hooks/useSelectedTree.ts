@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { HierarchyNode } from "d3";
 
 import {
   Props as UseSelectedItemsProps,
   ReturnType as UseSelectedItemsReturnType,
-  useSelectedItems,
 } from "./useSelectedItems";
 import { BaseItem } from "../features/d3-tree/types";
 
@@ -22,15 +21,52 @@ type ReturnType<T> = {
 export const useSelectedTree = <T extends BaseItem>(
   props: Props<T>
 ): ReturnType<T> => {
-  const { selectedItems, search, onSearch } = useSelectedItems<T>({
-    items: props.items,
-    itemKey: props.itemKey,
-  });
+  const [search, setSearch] = React.useState("");
+  const onSearch = (value: string): void => {
+    const resetSearch = (): void => {
+      setSearch("");
+    };
+    if (value === "") return resetSearch();
+    // We are not setting filteredItems here on purpose. Setting only search string ends up in the effect
+    // few lines above.
+    // If hook receives new items we want to maintain the search and do it for the new items. This is
+    // why we have the effect and why it's not necessary the filter items in this function or in resetSearch
+    // setFilteredItems(doSearch(value));
+    setSearch(value);
+  };
 
-  const selectedItemIds = React.useMemo(() => {
-    const selectedNodes = getSelectedNodes(selectedItems, props.tree);
-    return getSelectedNodesAndAllTheirParents(props.tree, selectedNodes);
-  }, [props.tree, selectedItems]);
+  const selectedItemIds = useMemo(() => {
+    const itemsTemp: Set<string> = new Set();
+    if (search.length === 0) {
+      return itemsTemp;
+    }
+    props.items.forEach((item) => {
+      const filteredItemValue = item[props.itemKey];
+      if (
+        typeof filteredItemValue === "string" &&
+        filteredItemValue.toLocaleLowerCase().includes(search.toLowerCase())
+      ) {
+        // @ts-ignore
+        const treeItem: HierarchyNode<T> = props.tree.find(
+          //@ts-ignore missing from types
+          (d) => String(d.id) === String(item.id)
+        );
+        const selectedNodes =
+          item.type === "folder"
+            ? treeItem && treeItem.children
+              ? treeItem.children
+              : []
+            : //@ts-ignore missing from types
+              [props.tree.find((d) => String(d.id) === String(item.id))];
+        selectedNodes
+          .flatMap((node) => {
+            return props.tree.path(node);
+          })
+          .map((node) => itemsTemp.add(String(node.id)));
+      }
+    });
+    return itemsTemp;
+  }, [props.itemKey, props.items, props.tree, search]);
 
   return {
     search,
