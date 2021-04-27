@@ -46,13 +46,10 @@ export const useSelectedTree = <T extends BaseItem>(
         typeof filteredItemValue === "string" &&
         filteredItemValue.toLocaleLowerCase().includes(search.toLowerCase())
       ) {
-        const selectedNodes =
-          treeItem.data.type === "folder"
-            ? treeItem && treeItem.children
-              ? treeItem.children
-              : []
-            : //@ts-ignore missing from types
-              [props.tree.find((d) => String(d.id) === String(treeItem.data.id))];
+        let selectedNodes = [treeItem];
+        if (treeItem.data.type === "folder" && treeItem.children) {
+          selectedNodes = selectedNodes.concat(treeItem.children);
+        }
         selectedNodes.forEach((node) => {
           props.tree.path(node).forEach((a) => {
             itemsTemp.add(String(a.data.id));
