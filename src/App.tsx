@@ -47,22 +47,22 @@ interface Report extends BaseType {
   type: "report";
 }
 
-const folders: Folder[] = [
-  { id: 1, name: "Root", parentId: null, type: "folder" },
-  { id: 2, name: "Cats", parentId: 1, type: "folder" },
-  { id: 3, name: "Dogs", parentId: 1, type: "folder" },
-  { id: 4, name: "Small", parentId: 2, type: "folder" },
-  { id: 5, name: "Big", parentId: 2, type: "folder" },
-  { id: 6, name: "Empty folder", parentId: 1, type: "folder" },
-];
-
-const reports: Report[] = [
-  { id: 10, name: "Kitten", parentId: 4, type: "report" },
-  { id: 20, name: "Kitten2", parentId: 4, type: "report" },
-  { id: 30, name: "Buldog", parentId: 3, type: "report" },
-  { id: 40, name: "Under root", parentId: 1, type: "report" },
-  { id: 50, name: "Fatcat", parentId: 5, type: "report" },
-];
+// const folders: Folder[] = [
+//   { id: 1, name: "Root", parentId: null, type: "folder" },
+//   { id: 2, name: "Cats", parentId: 1, type: "folder" },
+//   { id: 3, name: "Dogs", parentId: 1, type: "folder" },
+//   { id: 4, name: "Small", parentId: 2, type: "folder" },
+//   { id: 5, name: "Big", parentId: 2, type: "folder" },
+//   { id: 6, name: "Empty folder", parentId: 1, type: "folder" },
+// ];
+//
+// const reports: Report[] = [
+//   { id: 10, name: "Kitten", parentId: 4, type: "report" },
+//   { id: 20, name: "Kitten2", parentId: 4, type: "report" },
+//   { id: 30, name: "Buldog", parentId: 3, type: "report" },
+//   { id: 40, name: "Under root", parentId: 1, type: "report" },
+//   { id: 50, name: "Fatcat", parentId: 5, type: "report" },
+// ];
 
 function App() {
   // const combined: Array<Report | Folder> = [...folders, ...reports];

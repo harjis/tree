@@ -18,13 +18,6 @@ interface Folder extends BaseType {
   type: "folder";
 }
 
-interface Report extends BaseType {
-  id: number;
-  name: string;
-  parentId: number | null;
-  type: "report";
-}
-
 export const generate = (depth: number, itemsOnLevel: number) => {
   // console.log("fold id at start", folderId);
   const root = createFolder({ name: "Root", parentId: null });
