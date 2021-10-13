@@ -1,28 +1,12 @@
 import React from "react";
 import { HierarchyNode } from "d3";
 
-import {
-  Props as UseSelectedItemsProps,
-  ReturnType as UseSelectedItemsReturnType,
-  useSelectedItems,
-} from "./useSelectedItems";
+import { useSelectedItems } from "./useSelectedItems";
 import { BaseItem } from "../features/d3-tree/types";
+import { IUseSelectedTree } from "./IUseSelectedTree";
 
-type Props<T> = {
-  items: UseSelectedItemsProps<T>["items"];
-  itemKey: UseSelectedItemsProps<T>["itemKey"];
-  tree: HierarchyNode<T>;
-};
-
-type ReturnType<T> = {
-  search: UseSelectedItemsReturnType<T>["search"];
-  onSearch: UseSelectedItemsReturnType<T>["onSearch"];
-  selectedItemIds: Set<string>;
-};
-export const useSelectedTree = <T extends BaseItem>(
-  props: Props<T>
-): ReturnType<T> => {
-  const { selectedItems, search, onSearch } = useSelectedItems<T>({
+export const useSelectedTree: IUseSelectedTree = (props) => {
+  const { selectedItems, search, onSearch } = useSelectedItems({
     items: props.items,
     itemKey: props.itemKey,
   });
@@ -49,11 +33,18 @@ function getSelectedNodes<T extends BaseItem>(
     // I think d3 uses "leaf node" and "node" respectively
     if (selectedItem.type === "folder") {
       //@ts-ignore missing from types
-      const treeItem = tree.find((d) => d.id === String(selectedItem.id));
-      return treeItem ? treeItem.children : [];
+      const treeItem = tree.find(
+        //@ts-ignore missing from types
+        (d) => String(d.id) === String(selectedItem.id)
+      );
+
+      const selectedNodes = [treeItem];
+      return treeItem.children
+        ? selectedNodes.concat(treeItem.children)
+        : selectedNodes;
     } else {
       //@ts-ignore missing from types
-      return [tree.find((d) => d.id === String(selectedItem.id))];
+      return [tree.find((d) => String(d.id) === String(selectedItem.id))];
     }
   });
 }

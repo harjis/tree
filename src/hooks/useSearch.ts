@@ -1,4 +1,5 @@
 import React from "react";
+import { useDebounce } from "react-use";
 
 export type Props<T> = {
   items: T[];
@@ -24,18 +25,26 @@ export default function useSearch<T>({
 }: Props<T>): ReturnType<T> {
   const [search, setSearch] = React.useState("");
   const [filteredItems, setFilteredItems] = React.useState(items);
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  useDebounce(
+    () => {
+      setDebouncedSearch(search);
+    },
+    200,
+    [search]
+  );
 
   const doSearch = React.useCallback(
     (value: string): T[] =>
-      options && options.caseSensitive === true
+      options && options.caseSensitive
         ? caseSensitiveFilteringService(items, itemKey, value)
         : filteringService(items, itemKey, value),
     [items, itemKey, options]
   );
 
   React.useEffect(() => {
-    setFilteredItems(doSearch(search));
-  }, [items, search, doSearch]);
+    setFilteredItems(doSearch(debouncedSearch));
+  }, [items, debouncedSearch, doSearch]);
 
   const resetSearch = (): void => {
     // setFilteredItems(items);

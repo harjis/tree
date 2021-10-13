@@ -4,6 +4,7 @@ import { Story, Meta } from "@storybook/react";
 import { Tree, TreeProps } from "../index";
 
 import "./tree.css";
+import { useSelectedTreeOptimized } from "../../../hooks/useSelectedTreeOptimized";
 
 interface BaseType {
   type: string;
@@ -53,6 +54,7 @@ const Template: Story<TreeProps<Folder | Report>> = (args) => {
         labelKey="name"
         parentKey="parentId"
         width={args.width}
+        useSelectedTreeFn={useSelectedTreeOptimized}
       />
     </div>
   );
