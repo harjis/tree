@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React from "react";
 import { HierarchyNode } from "d3";
 
 import { render } from "./Cluster-d3";
@@ -11,7 +11,8 @@ export type Props<T> = {
   selectedItemIds: Set<string>;
   width: number;
 };
-export const Cluster = <T,>(props: PropsWithChildren<Props<T>>) => {
+
+const InternalCluster = <T,>(props: Props<T>) => {
   const ref = React.useRef<SVGGElement>(null);
 
   React.useEffect(() => {
@@ -21,3 +22,10 @@ export const Cluster = <T,>(props: PropsWithChildren<Props<T>>) => {
   }, [props]);
   return <g ref={ref} />;
 };
+
+// Memo hack: https://github.com/DefinitelyTyped/DefinitelyTyped/issues/37087#issuecomment-568218789
+interface IdentityFunction {
+  <T>(fn: T): T;
+}
+const typedMemo: IdentityFunction = React.memo;
+export const Cluster = typedMemo(InternalCluster);
