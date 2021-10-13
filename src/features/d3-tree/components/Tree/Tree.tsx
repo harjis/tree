@@ -6,8 +6,11 @@ import { BaseItem } from "../../types";
 import { Canvas } from "../Canvas";
 import { Cluster } from "../Cluster";
 import { stratify } from "../../utils/stratify";
-import { useSelectedTree } from "../../../../hooks/useSelectedTree";
 import { useHighlightedTreeItem } from "../../../../hooks/useHighlightedTreeItem";
+import { IUseSelectedTree } from "../../../../hooks/IUseSelectedTree";
+
+export const hookStart = "hook-start";
+export const hookEnd = "hook-end";
 
 export type Props<T> = {
   height: number;
@@ -16,6 +19,7 @@ export type Props<T> = {
   labelKey: keyof T;
   parentKey: keyof T;
   width: number;
+  useSelectedTreeFn: IUseSelectedTree;
 };
 export const Tree = <T extends BaseItem>(
   props: PropsWithChildren<Props<T>>
@@ -26,11 +30,22 @@ export const Tree = <T extends BaseItem>(
     () => stratify(props.items, props.idKey, props.parentKey),
     [props.items, props.idKey, props.parentKey]
   );
-  const { search, onSearch, selectedItemIds } = useSelectedTree({
+  const { useSelectedTreeFn } = props;
+  performance.mark(hookStart);
+  const { search, onSearch, selectedItemIds } = useSelectedTreeFn({
     items: props.items,
     itemKey: props.labelKey,
     tree,
   });
+  performance.mark(hookEnd);
+  performance.measure("measure hook-start to hook-end", hookStart, hookEnd);
+
+  console.log(
+    `Hook performance (${useSelectedTreeFn.name}): ${
+      performance.getEntriesByType("measure")[0].duration
+    }ms`
+  );
+  performance.clearMeasures();
 
   const highlightedTreeItem = useHighlightedTreeItem({ tree });
 

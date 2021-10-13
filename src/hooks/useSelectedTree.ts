@@ -1,27 +1,10 @@
 import React, { useMemo } from "react";
-import { HierarchyNode } from "d3";
+
 import { useDebounce } from "react-use";
 
-import {
-  Props as UseSelectedItemsProps,
-  ReturnType as UseSelectedItemsReturnType,
-} from "./useSelectedItems";
-import { BaseItem } from "../features/d3-tree/types";
+import { IUseSelectedTree } from "./IUseSelectedTree";
 
-type Props<T> = {
-  items: UseSelectedItemsProps<T>["items"];
-  itemKey: UseSelectedItemsProps<T>["itemKey"];
-  tree: HierarchyNode<T>;
-};
-
-type ReturnType<T> = {
-  search: UseSelectedItemsReturnType<T>["search"];
-  onSearch: UseSelectedItemsReturnType<T>["onSearch"];
-  selectedItemIds: Set<string>;
-};
-export const useSelectedTree = <T extends BaseItem>(
-  props: Props<T>
-): ReturnType<T> => {
+export const useSelectedTree: IUseSelectedTree = (props) => {
   const [search, setSearch] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   useDebounce(

@@ -4,6 +4,7 @@ import { Story, Meta } from "@storybook/react";
 import { Tree, TreeProps } from "../index";
 
 import "./tree.css";
+import { useSelectedTree } from "../../../hooks/useSelectedTree";
 
 interface BaseType {
   type: string;
@@ -53,6 +54,7 @@ const Template: Story<TreeProps<Folder | Report>> = (args) => {
         labelKey="name"
         parentKey="parentId"
         width={args.width}
+        useSelectedTreeFn={useSelectedTree}
       />
     </div>
   );

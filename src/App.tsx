@@ -2,6 +2,8 @@ import React from "react";
 
 import { Tree } from "./features/d3-tree";
 import { generate } from "./dataGenerator";
+import { useSelectedTree } from "./hooks/useSelectedTree";
+import { useSelectedTreeUnOptimized } from "./hooks/useSelectedTreeUnOptimized";
 
 /*
  * Perf results:
@@ -63,7 +65,7 @@ const reports: Report[] = [
 
 function App() {
   // const combined: Array<Report | Folder> = [...folders, ...reports];
-  const combined = React.useMemo(() => generate(3, 20), []);
+  const combined = React.useMemo(() => generate(3, 10), []);
   const itemLength = combined.length;
   console.log("items in data structure: ", itemLength);
   let height = 1000;
@@ -74,15 +76,35 @@ function App() {
   } else if (itemLength > 7000) {
     height = 300000;
   }
+
   return (
-    <Tree
-      height={height}
-      idKey="id"
-      items={combined}
-      labelKey="name"
-      parentKey="parentId"
-      width={500}
-    />
+    <div style={{ display: "flex", width: "100%" }}>
+      <div>
+        Optimised:
+        <Tree
+          height={height}
+          idKey="id"
+          items={combined}
+          labelKey="name"
+          parentKey="parentId"
+          width={500}
+          useSelectedTreeFn={useSelectedTree}
+        />
+      </div>
+
+      <div>
+        Un-optimised:
+        <Tree
+          height={height}
+          idKey="id"
+          items={combined}
+          labelKey="name"
+          parentKey="parentId"
+          width={500}
+          useSelectedTreeFn={useSelectedTreeUnOptimized}
+        />
+      </div>
+    </div>
   );
 }
 
