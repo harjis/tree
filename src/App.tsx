@@ -31,41 +31,9 @@ import { useSelectedTree } from "./hooks/useSelectedTree";
  * more-optimized 8k nodes prod: useSelectedTree: 1.2s which is ran 1 times. Whole thing with rendering ~2s
  * -> Sometimes I get really weird results: search takes 20ms and whole thing around ~800ms
  * */
-interface BaseType {
-  type: string;
-}
-interface Folder extends BaseType {
-  id: number;
-  name: string;
-  parentId: number | null;
-  type: "folder";
-}
-interface Report extends BaseType {
-  id: number;
-  name: string;
-  parentId: number | null;
-  type: "report";
-}
-
-// const folders: Folder[] = [
-//   { id: 1, name: "Root", parentId: null, type: "folder" },
-//   { id: 2, name: "Cats", parentId: 1, type: "folder" },
-//   { id: 3, name: "Dogs", parentId: 1, type: "folder" },
-//   { id: 4, name: "Small", parentId: 2, type: "folder" },
-//   { id: 5, name: "Big", parentId: 2, type: "folder" },
-//   { id: 6, name: "Empty folder", parentId: 1, type: "folder" },
-// ];
-//
-// const reports: Report[] = [
-//   { id: 10, name: "Kitten", parentId: 4, type: "report" },
-//   { id: 20, name: "Kitten2", parentId: 4, type: "report" },
-//   { id: 30, name: "Buldog", parentId: 3, type: "report" },
-//   { id: 40, name: "Under root", parentId: 1, type: "report" },
-//   { id: 50, name: "Fatcat", parentId: 5, type: "report" },
-// ];
 
 function App() {
-  // const combined: Array<Report | Folder> = [...folders, ...reports];
+  // const combined: Array<Report | Folder> = staticData();
   const combined = React.useMemo(() => generate(3, 10), []);
   const itemLength = combined.length;
   console.log("items in data structure: ", itemLength);
@@ -112,3 +80,40 @@ function App() {
 }
 
 export default App;
+
+// interface BaseType {
+//   type: string;
+// }
+// interface Folder extends BaseType {
+//   id: number;
+//   name: string;
+//   parentId: number | null;
+//   type: "folder";
+// }
+// interface Report extends BaseType {
+//   id: number;
+//   name: string;
+//   parentId: number | null;
+//   type: "report";
+// }
+//
+// function staticData() {
+//   const folders: Folder[] = [
+//     { id: 1, name: "Root", parentId: null, type: "folder" },
+//     { id: 2, name: "Cats", parentId: 1, type: "folder" },
+//     { id: 3, name: "Dogs", parentId: 1, type: "folder" },
+//     { id: 4, name: "Small", parentId: 2, type: "folder" },
+//     { id: 5, name: "Big", parentId: 2, type: "folder" },
+//     { id: 6, name: "Empty folder", parentId: 1, type: "folder" },
+//   ];
+//
+//   const reports: Report[] = [
+//     { id: 10, name: "Kitten", parentId: 4, type: "report" },
+//     { id: 20, name: "Kitten2", parentId: 4, type: "report" },
+//     { id: 30, name: "Buldog", parentId: 3, type: "report" },
+//     { id: 40, name: "Under root", parentId: 1, type: "report" },
+//     { id: 50, name: "Fatcat", parentId: 5, type: "report" },
+//   ];
+//
+//   return [...folders, ...reports];
+// }
