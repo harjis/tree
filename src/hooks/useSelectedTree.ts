@@ -5,7 +5,7 @@ import { useSelectedItems } from "./useSelectedItems";
 import { BaseItem } from "../features/d3-tree/types";
 import { IUseSelectedTree } from "./IUseSelectedTree";
 
-export const useSelectedTreeUnOptimized: IUseSelectedTree = (props) => {
+export const useSelectedTree: IUseSelectedTree = (props) => {
   const { selectedItems, search, onSearch } = useSelectedItems({
     items: props.items,
     itemKey: props.itemKey,

@@ -3,7 +3,7 @@ import React from "react";
 import { Tree } from "./features/d3-tree";
 import { generate } from "./dataGenerator";
 import { useSelectedTreeOptimized } from "./hooks/useSelectedTreeOptimized";
-import { useSelectedTreeUnOptimized } from "./hooks/useSelectedTreeUnOptimized";
+import { useSelectedTree } from "./hooks/useSelectedTree";
 
 /*
  * Perf results:
@@ -101,7 +101,7 @@ function App() {
           labelKey="name"
           parentKey="parentId"
           width={500}
-          useSelectedTreeFn={useSelectedTreeUnOptimized}
+          useSelectedTreeFn={useSelectedTree}
         />
       </div>
     </div>
