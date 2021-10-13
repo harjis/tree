@@ -4,7 +4,7 @@ import { useDebounce } from "react-use";
 
 import { IUseSelectedTree } from "./IUseSelectedTree";
 
-export const useSelectedTree: IUseSelectedTree = (props) => {
+export const useSelectedTreeOptimized: IUseSelectedTree = (props) => {
   const [search, setSearch] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
   useDebounce(

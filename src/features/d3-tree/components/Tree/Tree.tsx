@@ -24,7 +24,7 @@ export type Props<T> = {
 export const Tree = <T extends BaseItem>(
   props: PropsWithChildren<Props<T>>
 ) => {
-  // In our app all d3 related stuff could be completely inside the useSelectedTree hook
+  // In our app all d3 related stuff could be completely inside the useSelectedTreeOptimized hook
   // I have them here because Cluster takes tree as props
   const tree = React.useMemo(
     () => stratify(props.items, props.idKey, props.parentKey),
