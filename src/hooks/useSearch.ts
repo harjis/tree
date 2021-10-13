@@ -1,4 +1,5 @@
 import React from "react";
+import { useDebounce } from "react-use";
 
 export type Props<T> = {
   items: T[];
@@ -24,6 +25,14 @@ export default function useSearch<T>({
 }: Props<T>): ReturnType<T> {
   const [search, setSearch] = React.useState("");
   const [filteredItems, setFilteredItems] = React.useState(items);
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  useDebounce(
+    () => {
+      setDebouncedSearch(search);
+    },
+    200,
+    [search]
+  );
 
   const doSearch = React.useCallback(
     (value: string): T[] =>
@@ -34,8 +43,8 @@ export default function useSearch<T>({
   );
 
   React.useEffect(() => {
-    setFilteredItems(doSearch(search));
-  }, [items, search, doSearch]);
+    setFilteredItems(doSearch(debouncedSearch));
+  }, [items, debouncedSearch, doSearch]);
 
   const resetSearch = (): void => {
     // setFilteredItems(items);

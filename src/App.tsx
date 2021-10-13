@@ -53,6 +53,7 @@ const folders: Folder[] = [
   { id: 3, name: "Dogs", parentId: 1, type: "folder" },
   { id: 4, name: "Small", parentId: 2, type: "folder" },
   { id: 5, name: "Big", parentId: 2, type: "folder" },
+  { id: 6, name: "Empty folder", parentId: 1, type: "folder" },
 ];
 
 const reports: Report[] = [
@@ -69,7 +70,9 @@ function App() {
   const itemLength = combined.length;
   console.log("items in data structure: ", itemLength);
   let height = 1000;
-  if (itemLength < 2000) {
+  if (itemLength < 100) {
+    height = 800;
+  } else if (itemLength < 2000) {
     height = 40000;
   } else if (itemLength > 2000 && itemLength < 7000) {
     height = 130000;
@@ -80,7 +83,7 @@ function App() {
   return (
     <div style={{ display: "flex", width: "100%" }}>
       <div>
-        Optimised:
+        Optimised: (Or at least tries to be)
         <Tree
           height={height}
           idKey="id"

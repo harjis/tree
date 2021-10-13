@@ -38,7 +38,10 @@ function getSelectedNodes<T extends BaseItem>(
         (d) => String(d.id) === String(selectedItem.id)
       );
 
-      return treeItem && treeItem.children ? treeItem.children : [];
+      const selectedNodes = [treeItem];
+      return treeItem.children
+        ? selectedNodes.concat(treeItem.children)
+        : selectedNodes;
     } else {
       //@ts-ignore missing from types
       return [tree.find((d) => String(d.id) === String(selectedItem.id))];
