@@ -1,20 +1,20 @@
 import React from "react";
 import { HierarchyNode } from "d3";
 
-import { useSelectedItems } from "./useSelectedItems";
+import { useSearch } from "./useSearch";
 import { BaseItem } from "../features/d3-tree/types";
 import { IUseSelectedTree } from "./IUseSelectedTree";
 
 export const useSelectedTree: IUseSelectedTree = (props) => {
-  const { selectedItems, search, onSearch } = useSelectedItems({
+  const { filteredItems, search, onSearch } = useSearch({
     items: props.items,
     itemKey: props.itemKey,
   });
 
   const selectedItemIds = React.useMemo(() => {
-    const selectedNodes = getSelectedNodes(selectedItems, props.tree);
+    const selectedNodes = getSelectedNodes(filteredItems, props.tree);
     return getSelectedNodesAndAllTheirParents(props.tree, selectedNodes);
-  }, [props.tree, selectedItems]);
+  }, [filteredItems, props.tree]);
 
   return {
     search,

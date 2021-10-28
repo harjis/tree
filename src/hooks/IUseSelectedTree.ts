@@ -1,8 +1,10 @@
 import { HierarchyNode } from "d3";
 
 import { BaseItem } from "../features/d3-tree/types";
-import { Props as UseSelectedItemsProps } from "./useSearch";
-import { ReturnType as UseSelectedItemsReturnType } from "./useSelectedItems";
+import {
+  ReturnType as UseSearchReturnType,
+  Props as UseSelectedItemsProps,
+} from "./useSearch";
 
 type Props<T> = {
   items: UseSelectedItemsProps<T>["items"];
@@ -11,8 +13,8 @@ type Props<T> = {
 };
 
 type ReturnType<T> = {
-  search: UseSelectedItemsReturnType<T>["search"];
-  onSearch: UseSelectedItemsReturnType<T>["onSearch"];
+  search: UseSearchReturnType<T>["search"];
+  onSearch: UseSearchReturnType<T>["onSearch"];
   selectedItemIds: Set<string>;
 };
 

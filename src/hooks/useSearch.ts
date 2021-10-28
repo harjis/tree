@@ -7,6 +7,7 @@ export type Props<T> = {
   options?: { caseSensitive: boolean };
 };
 export type ReturnType<T> = {
+  debouncedSearch: string;
   filteredItems: T[];
   onSearch: (value: string) => void;
   search: string;
@@ -18,41 +19,41 @@ export const initialState = {
   },
   search: "",
 };
-export default function useSearch<T>({
+export function useSearch<T>({
   items,
   itemKey,
   options,
 }: Props<T>): ReturnType<T> {
   const [search, setSearch] = React.useState("");
-  const [filteredItems, setFilteredItems] = React.useState(items);
-  const [debouncedSearch, setDebouncedSearch] = React.useState("");
-  useDebounce(
-    () => {
-      setDebouncedSearch(search);
-    },
-    200,
-    [search]
-  );
+  const [debouncedState, setDebouncedState] = React.useState<{
+    items: T[];
+    debouncedSearch: string;
+  }>({
+    items: [],
+    debouncedSearch: "",
+  });
 
   const doSearch = React.useCallback(
     (value: string): T[] =>
       options && options.caseSensitive
         ? caseSensitiveFilteringService(items, itemKey, value)
         : filteringService(items, itemKey, value),
-    [items, itemKey, options]
+    [itemKey, items, options]
   );
 
-  React.useEffect(() => {
-    setFilteredItems(doSearch(debouncedSearch));
-  }, [items, debouncedSearch, doSearch]);
-
-  const resetSearch = (): void => {
-    // setFilteredItems(items);
-    setSearch("");
-  };
+  useDebounce(
+    () => {
+      if (search !== "") {
+        setDebouncedState({ debouncedSearch: search, items: doSearch(search) });
+      } else {
+        setDebouncedState({ debouncedSearch: search, items: [] });
+      }
+    },
+    200,
+    [search]
+  );
 
   const onSearch = (value: string): void => {
-    if (value === "") return resetSearch();
     // We are not setting filteredItems here on purpose. Setting only search string ends up in the effect
     // few lines above.
     // If hook receives new items we want to maintain the search and do it for the new items. This is
@@ -61,7 +62,12 @@ export default function useSearch<T>({
     setSearch(value);
   };
 
-  return { search, filteredItems, onSearch };
+  return {
+    debouncedSearch: debouncedState.debouncedSearch,
+    search,
+    filteredItems: debouncedState.items,
+    onSearch,
+  };
 }
 
 function filteringService<T>(items: T[], itemKey: keyof T, value: string) {
