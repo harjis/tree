@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useDebounce } from "react-use";
 import { SearchService } from "../services/SearchService";
 
@@ -27,24 +27,11 @@ export function useSearch<T>({
 }: Props<T>): ReturnType<T> {
   const searchService = SearchService({ items, itemKey, options });
   const [search, setSearch] = React.useState("");
-  const [debouncedState, setDebouncedState] = React.useState<{
-    items: T[];
-    debouncedSearch: string;
-  }>({
-    items: [],
-    debouncedSearch: "",
-  });
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
 
   useDebounce(
     () => {
-      if (search !== "") {
-        setDebouncedState({
-          debouncedSearch: search,
-          items: searchService.doSearch(search),
-        });
-      } else {
-        setDebouncedState({ debouncedSearch: search, items: [] });
-      }
+      setDebouncedSearch(search);
     },
     200,
     [search]
@@ -59,10 +46,16 @@ export function useSearch<T>({
     setSearch(value);
   };
 
+  const filteredItems = useMemo(
+    () =>
+      debouncedSearch !== "" ? searchService.doSearch(debouncedSearch) : [],
+    [debouncedSearch, searchService]
+  );
+
   return {
-    debouncedSearch: debouncedState.debouncedSearch,
+    debouncedSearch,
     search,
-    filteredItems: debouncedState.items,
+    filteredItems,
     onSearch,
   };
 }
