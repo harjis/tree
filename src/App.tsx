@@ -51,7 +51,7 @@ function App() {
   return (
     <div style={{ display: "flex", width: "100%" }}>
       <div>
-        Optimised: (Or at least tries to be)
+        Optimised: (Or at least tries to be. Turns out it really isn't)
         <Tree
           height={height}
           idKey="id"
@@ -64,7 +64,7 @@ function App() {
       </div>
 
       <div>
-        Un-optimised:
+        "Un-optimised":
         <Tree
           height={height}
           idKey="id"

@@ -1,5 +1,6 @@
 import React from "react";
 import { useDebounce } from "react-use";
+import { SearchService } from "../services/SearchService";
 
 export type Props<T> = {
   items: T[];
@@ -24,6 +25,7 @@ export function useSearch<T>({
   itemKey,
   options,
 }: Props<T>): ReturnType<T> {
+  const searchService = SearchService({ items, itemKey, options });
   const [search, setSearch] = React.useState("");
   const [debouncedState, setDebouncedState] = React.useState<{
     items: T[];
@@ -33,18 +35,13 @@ export function useSearch<T>({
     debouncedSearch: "",
   });
 
-  const doSearch = React.useCallback(
-    (value: string): T[] =>
-      options && options.caseSensitive
-        ? caseSensitiveFilteringService(items, itemKey, value)
-        : filteringService(items, itemKey, value),
-    [itemKey, items, options]
-  );
-
   useDebounce(
     () => {
       if (search !== "") {
-        setDebouncedState({ debouncedSearch: search, items: doSearch(search) });
+        setDebouncedState({
+          debouncedSearch: search,
+          items: searchService.doSearch(search),
+        });
       } else {
         setDebouncedState({ debouncedSearch: search, items: [] });
       }
@@ -68,36 +65,4 @@ export function useSearch<T>({
     filteredItems: debouncedState.items,
     onSearch,
   };
-}
-
-function filteringService<T>(items: T[], itemKey: keyof T, value: string) {
-  return items.reduce<T[]>((acc, filteredItem) => {
-    const filteredItemValue = filteredItem[itemKey];
-    if (
-      typeof filteredItemValue === "string" &&
-      filteredItemValue.toLocaleLowerCase().includes(value.toLowerCase())
-    ) {
-      return [...acc, filteredItem];
-    } else {
-      return acc;
-    }
-  }, []);
-}
-
-function caseSensitiveFilteringService<T>(
-  items: T[],
-  itemKey: keyof T,
-  value: string
-) {
-  return items.reduce<T[]>((acc, filteredItem) => {
-    const filteredItemValue = filteredItem[itemKey];
-    if (
-      typeof filteredItemValue === "string" &&
-      filteredItemValue.includes(value)
-    ) {
-      return [...acc, filteredItem];
-    } else {
-      return acc;
-    }
-  }, []);
 }
